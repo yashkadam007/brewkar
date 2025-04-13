@@ -7,7 +7,8 @@ build:
 	go build -o bin/api cmd/api/main.go
 
 test:
-	go test -v ./...
+	@echo "Running tests..."
+	@go test ./tests/... -v
 
 migrate-create:
 	migrate create -ext sql -dir migrations -seq $(name)
