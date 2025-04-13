@@ -18,19 +18,20 @@ type AuthService interface {
 	RefreshToken(refreshToken string) (string, string, error)
 }
 
-type authService struct {
+// Change from authService to AuthServiceImpl
+type AuthServiceImpl struct {
 	userRepo repository.UserRepository
 	jwtCfg   config.JWTConfig
 }
 
 func NewAuthService(userRepo repository.UserRepository, jwtCfg config.JWTConfig) AuthService {
-	return &authService{
+	return &AuthServiceImpl{
 		userRepo: userRepo,
 		jwtCfg:   jwtCfg,
 	}
 }
 
-func (s *authService) Register(email, password, displayName string) (*domain.User, string, error) {
+func (s *AuthServiceImpl) Register(email, password, displayName string) (*domain.User, string, error) {
 	// Check if user already exists
 	existing, err := s.userRepo.GetByEmail(email)
 	if err == nil && existing != nil {
@@ -65,7 +66,7 @@ func (s *authService) Register(email, password, displayName string) (*domain.Use
 	return user, token, nil
 }
 
-func (s *authService) Login(email, password string) (*domain.User, string, error) {
+func (s *AuthServiceImpl) Login(email, password string) (*domain.User, string, error) {
 	// Find user by email
 	user, err := s.userRepo.GetByEmail(email)
 	if err != nil {
@@ -94,12 +95,12 @@ func (s *authService) Login(email, password string) (*domain.User, string, error
 	return user, token, nil
 }
 
-func (s *authService) RefreshToken(refreshToken string) (string, string, error) {
+func (s *AuthServiceImpl) RefreshToken(refreshToken string) (string, string, error) {
 	// TODO: Implement refresh token logic
 	return "", "", nil
 }
 
-func (s *authService) generateToken(userID uuid.UUID) (string, error) {
+func (s *AuthServiceImpl) generateToken(userID uuid.UUID) (string, error) {
 	// Create claims
 	claims := jwt.MapClaims{
 		"sub": userID.String(),

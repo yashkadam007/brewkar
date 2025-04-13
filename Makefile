@@ -25,3 +25,8 @@ lint:
 migrate:
 	@echo "Running database migrations..."
 	@go run migrations/001_create_tables.go
+
+# Generate Wire code
+wire:
+	@echo "Generating dependency injection code..."
+	@go run github.com/google/wire/cmd/wire ./internal/di
