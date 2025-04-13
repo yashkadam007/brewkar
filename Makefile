@@ -20,3 +20,8 @@ migrate-down:
 
 lint:
 	golangci-lint run
+
+# Add migration command
+migrate:
+	@echo "Running database migrations..."
+	@go run migrations/001_create_tables.go
